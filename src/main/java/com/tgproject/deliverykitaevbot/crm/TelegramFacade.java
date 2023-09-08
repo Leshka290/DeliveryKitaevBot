@@ -30,12 +30,12 @@ public class TelegramFacade {
     private final StartMenu startMenu;
     private final InlineBuilder inlineBuilder;
     private final UserService userService;
-//    private final SpecialService specialService;
-//    private final SupportService supportService;
+    private final SpecialService specialService;
     private final RestaurantMenu restaurantMenu;
     private final InlineMenuRepository inlineMenuRepository;
     private final UserStateRepository userStateRepository;
     private final LocalizedMessages lang;
+//    private final SupportService supportService;
 
     /**
      * Фасад, основная логика построения меню бота и обработки статусов
@@ -98,11 +98,11 @@ public class TelegramFacade {
 //            return;
 //        }
 
-//        // Обработка специальных статусов
-//        if (user.getStateId() != null && user.getStateId().getTagSpecial() != null) {
-//            specialService.checkSpecialStatus(user, update);
-//            return;
-//        }
+        // Обработка специальных статусов
+        if (user.getStateId() != null && user.getStateId().getTagSpecial() != null) {
+            specialService.checkSpecialStatus(user, update);
+            return;
+        }
 
         // есть callback_data
         if (tag != null) {
@@ -111,11 +111,11 @@ public class TelegramFacade {
                             user.getRestaurantId(),
                             tag
                     );
-//            // Получаем меню из базы по TagCallback
-//            if (menuOptional.isEmpty() && user.getStateId().getTagSpecial() != null) {
-//                specialService.checkSpecialStatus(user, update);
-//                return;
-//            }
+            // Получаем меню из базы по TagCallback
+            if (menuOptional.isEmpty() && user.getStateId().getTagSpecial() != null) {
+                specialService.checkSpecialStatus(user, update);
+                return;
+            }
             if (menuOptional.isPresent()) {
                 InlineMenu menu = menuOptional.get();
                 message = menu.getAnswer();
@@ -123,11 +123,11 @@ public class TelegramFacade {
                 if (menu.getStateIdNext() != null) {
                     user.setStateId(menu.getStateIdNext());
                 }
-//                // Обработка кнопки меню, когда есть специальный статус(действие/меню) по нажатию на кнопку
-//                if (user.getStateId().getTagSpecial() != null) {
-//                    specialService.checkSpecialStatusInMenu(user, update, menu);
-//                    return;
-//                }
+                // Обработка кнопки меню, когда есть специальный статус(действие/меню) по нажатию на кнопку
+                if (user.getStateId().getTagSpecial() != null) {
+                    specialService.checkSpecialStatusInMenu(user, update, menu);
+                    return;
+                }
 
                 // Формируем динамическое меню
                 InlineKeyboardMarkup inlineMenu = inlineBuilder.getInlineMenu(menu);

@@ -43,7 +43,8 @@ public class InlineBuilder {
                     telegramAnswer.getTagCallback() != null &&
                     telegramAnswer.getButton().length() > 0 &&
                     telegramAnswer.getTagCallback().length() > 0) {
-                keyboardMarkup.addRow(new InlineKeyboardButton(telegramAnswer.getButton()).callbackData(telegramAnswer.getTagCallback()));
+                keyboardMarkup.addRow(new InlineKeyboardButton(telegramAnswer.getButton())
+                        .callbackData(telegramAnswer.getTagCallback()));
             }
         });
         log.debug("InlineKeyboardMarkup: {}", keyboardMarkup);

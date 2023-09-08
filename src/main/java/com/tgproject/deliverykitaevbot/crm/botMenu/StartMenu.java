@@ -1,6 +1,7 @@
 package com.tgproject.deliverykitaevbot.crm.botMenu;
 
 import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
+import com.pengrad.telegrambot.request.EditMessageText;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.tgproject.deliverykitaevbot.crm.InlineBuilder;
 import com.tgproject.deliverykitaevbot.crm.LocalizedMessages;
@@ -30,7 +31,7 @@ public class StartMenu {
      * и смена статуса пользователя
      *
      * @param user User
-     * @return  new SendMessage с меню
+     * @return new SendMessage с меню
      */
     public SendMessage getSendMessageStartMenu(@NotNull User user) {
         String defaultMsg = lang.get("start", user);
@@ -47,5 +48,31 @@ public class StartMenu {
         }
         InlineKeyboardMarkup keyboardMarkup = inlineBuilder.getInlineMenu(inlineMenu);
         return new SendMessage(user.getChatId(), defaultMsg).replyMarkup(keyboardMarkup);
+    }
+
+    /**
+     * Постронение меню приюта в соответствии с выбором нажатой кнопки
+     * и смена статуса пользователя
+     *
+     * @param user User
+     * @return EditMessageText с меню
+     */
+    public EditMessageText getEditMessageStartMenu(@NotNull User user) {
+        String defaultMsg = lang.get("start", user);
+        InlineMenu inlineMenu = new InlineMenu();
+        Optional<InlineMenu> menuOptional =
+                inlineMenuRepository.findFirstByRestaurantIdAndQuestion(
+                        user.getRestaurantId(),
+                        "/start");
+        if (menuOptional.isPresent()) {
+            inlineMenu = menuOptional.get();
+            defaultMsg = menuOptional.get().getAnswer();
+            user.setStateId(inlineMenu.getStateIdNext());
+            userService.update(user);
+        }
+        InlineKeyboardMarkup keyboardMarkup = inlineBuilder.getInlineMenu(inlineMenu);
+        return new EditMessageText(user.getChatId(),
+                user.getLastResponseStateMenuId().intValue(),
+                defaultMsg).replyMarkup(keyboardMarkup);
     }
 }

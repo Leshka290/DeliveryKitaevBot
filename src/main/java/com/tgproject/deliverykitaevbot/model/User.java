@@ -31,6 +31,8 @@ public class User {
 
     private Long restaurantId;
 
+    private String phone;
+
     private Long lastResponseStateMenuId;
 
     @JoinColumn(name = "state_id")

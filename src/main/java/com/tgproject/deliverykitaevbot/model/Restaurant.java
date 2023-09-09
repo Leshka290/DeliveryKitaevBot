@@ -2,9 +2,11 @@ package com.tgproject.deliverykitaevbot.model;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.Type;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 @Data
 @RequiredArgsConstructor
@@ -15,6 +17,5 @@ public class Restaurant {
     @Id
     @GeneratedValue
     private Long id;
-
     private String name;
 }

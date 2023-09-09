@@ -21,11 +21,8 @@ public class UserState {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String firstName;
-
     @Enumerated(EnumType.STRING)
     private UserStateSpecial tagSpecial;
-
     private Long restaurantId;
 }

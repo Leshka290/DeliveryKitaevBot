@@ -7,6 +7,14 @@ import java.util.Collection;
 public interface InlineMenuService {
 
     /**
+     * Сохранить новый пункт меню
+     *
+     * @param inlineMenuDto InlineMenuDto
+     * @return InlineMenuDto
+     */
+    InlineMenuDto saveInlineMenu(InlineMenuDto inlineMenuDto);
+
+    /**
      * Получить пункт меню по ID
      *
      * @param id Long

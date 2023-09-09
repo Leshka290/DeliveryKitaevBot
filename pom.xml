@@ -10,14 +10,13 @@
     </parent>
     <groupId>com.tgproject</groupId>
     <artifactId>DeliveryKitaevBot</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0</version>
     <name>DeliveryKitaevBot</name>
     <description>DeliveryKitaevBot</description>
     <properties>
         <java.version>11</java.version>
         <java-telegram-bot-api.version>6.7.0</java-telegram-bot-api.version>
         <springdoc-openapi-ui.version>1.6.3</springdoc-openapi-ui.version>
-        <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
         <org.modelmapper.version>3.1.1</org.modelmapper.version>
     </properties>
     <dependencies>
@@ -33,11 +32,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct</artifactId>
-            <version>${org.mapstruct.version}</version>
         </dependency>
         <dependency>
             <groupId>org.modelmapper</groupId>

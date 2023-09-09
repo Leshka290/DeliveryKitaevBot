@@ -8,7 +8,8 @@ import java.io.Serializable;
 @Data
 public class RestaurantDto implements Serializable {
 
-    private final Long id;
+    private Long id;
     @NotEmpty
-    private final String name;
+    private String name;
+
 }

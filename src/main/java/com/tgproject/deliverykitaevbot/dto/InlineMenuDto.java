@@ -5,15 +5,14 @@ import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 @Data
-public class InlineMenuDto {
+public class InlineMenuDto implements Serializable {
 
     private Long id;
     @NotNull
-    private Long languageId;
-    @NotNull
-    private Long shelterId;
+    private Long restaurantId;
     @NotNull
     @NotBlank
     private String tagCallback;

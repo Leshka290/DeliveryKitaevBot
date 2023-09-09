@@ -35,7 +35,7 @@ public class TelegramFacade {
     private final InlineMenuRepository inlineMenuRepository;
     private final UserStateRepository userStateRepository;
     private final LocalizedMessages lang;
-//    private final SupportService supportService;
+    private final SupportService supportService;
 
     /**
      * Фасад, основная логика построения меню бота и обработки статусов
@@ -62,7 +62,8 @@ public class TelegramFacade {
         // Обработка команды /start, начальная точка работы бота
         if (message.startsWith("/start")) {
             user.setRestaurantId(null);
-            user.setStateId(userStateRepository.findFirstByTagSpecial(UserStateSpecial.SELECT_RESTAURANT).orElse(null));
+            user.setStateId(userStateRepository.findFirstByTagSpecial(UserStateSpecial.SELECT_RESTAURANT)
+                    .orElse(null));
             user.setLastResponseStateMenuId(null);
             messageSender.sendMessage(restaurantMenu.getRestaurantMenu(user), user);
             return;
@@ -76,7 +77,8 @@ public class TelegramFacade {
 
         // Выйти в главное меню
         if (message.startsWith("\uD83D\uDD1A")) {
-            messageSender.sendMessage(new SendMessage(idUser, lang.get("chat_end", user)).replyMarkup(new ReplyKeyboardRemove())
+            messageSender.sendMessage(new SendMessage(idUser, lang.get("chat_end", user))
+                            .replyMarkup(new ReplyKeyboardRemove())
                     , user);
             messageSender.sendMessage(startMenu.getSendMessageStartMenu(user), user);
             return;
@@ -92,11 +94,11 @@ public class TelegramFacade {
             return;
         }
 
-//        // Отвечает сотрудник чата поддержки. Не логируем, ничего не сохраняем
-//        if (supportService.isSupportChat(update)) {
-//            bot.execute(supportService.sendToUser(update));
-//            return;
-//        }
+        // Отвечает сотрудник чата поддержки. Не логируем, ничего не сохраняем
+        if (supportService.isSupportChat(update)) {
+            bot.execute(supportService.sendToUser(update));
+            return;
+        }
 
         // Обработка специальных статусов
         if (user.getStateId() != null && user.getStateId().getTagSpecial() != null) {
@@ -154,7 +156,7 @@ public class TelegramFacade {
      * @return message текст написанный в чат
      */
     private String getMessage(Update update) {
-        String message = "^-^";
+        String message = "HI";
         if (update.message() != null && update.message().text() != null) {
             message = update.message().text();
         }

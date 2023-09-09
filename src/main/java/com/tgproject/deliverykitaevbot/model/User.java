@@ -22,22 +22,14 @@ public class User {
     @Id
     @GeneratedValue
     private Long id;
-
     private String firstName;
-
     private Long chatId;
-
     private TypeRestaurant lastTypeRestaurant;
-
     private Long restaurantId;
-
     private String phone;
-
     private Long lastResponseStateMenuId;
-
     @JoinColumn(name = "state_id")
     @OneToOne
     private UserState stateId;
-
     private OffsetDateTime dtCreate;
 }

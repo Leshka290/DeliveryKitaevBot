@@ -19,23 +19,15 @@ public class InlineMenu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private Long restaurantId;
-
     private String tagCallback;
-
     private String question;
-
     private String answer;
-
     private String button;
-
     @OneToOne
     private UserState stateId;
-
     @OneToOne
     private UserState stateIdNext;
-
     private Integer priority;
 
 }

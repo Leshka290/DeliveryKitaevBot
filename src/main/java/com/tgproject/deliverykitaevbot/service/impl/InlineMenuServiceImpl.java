@@ -2,12 +2,10 @@ package com.tgproject.deliverykitaevbot.service.impl;
 
 import com.tgproject.deliverykitaevbot.dto.InlineMenuDto;
 import com.tgproject.deliverykitaevbot.mapper.InlineMenuMapper;
-import com.tgproject.deliverykitaevbot.model.InlineMenu;
 import com.tgproject.deliverykitaevbot.model.UserState;
 import com.tgproject.deliverykitaevbot.repository.InlineMenuRepository;
 import com.tgproject.deliverykitaevbot.repository.UserStateRepository;
 import com.tgproject.deliverykitaevbot.service.InlineMenuService;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,8 +32,10 @@ public class InlineMenuServiceImpl implements InlineMenuService {
 
     public InlineMenuDto saveInlineMenu(InlineMenuDto inlineMenuDto) {
         log.debug(LOG_SAMPLE, "saveInlineMenu", inlineMenuDto);
-        Set<Long> stateIds = stateRepository.findAll().stream().map(UserState::getId).collect(Collectors.toSet());
-        if (!stateIds.contains(inlineMenuDto.getStateIdNext().getId()) || inlineMenuDto.getStateId().getId() < 0) {
+        Set<Long> stateIds = stateRepository.findAll().stream()
+                .map(UserState::getId).collect(Collectors.toSet());
+        if (!stateIds.contains(inlineMenuDto.getStateIdNext().getId()) ||
+                inlineMenuDto.getStateId().getId() < 0) {
             throw new IllegalArgumentException(NOT_ACCEPTABLE);
         } else if (menuRepository.findById(inlineMenuDto.getId()).isPresent()) {
             String FORBIDDEN = "This menu already exist";
@@ -47,19 +47,22 @@ public class InlineMenuServiceImpl implements InlineMenuService {
 
     public InlineMenuDto getInlineMenu(Long id) {
         log.debug(LOG_SAMPLE, "getInlineMenu", id);
-        //404 will have been thrown
-        return menuRepository.findById(id).map(mapper::toDto).orElseThrow(() -> new EntityNotFoundException(NOT_FOUND));
+        return menuRepository.findById(id).map(mapper::toDto).orElseThrow(() ->
+                new EntityNotFoundException(NOT_FOUND));
     }
 
     public Collection<InlineMenuDto> getAllInlineMenu() {
         log.debug(LOG_SAMPLE, "getAllInlineMenu", Void.TYPE);
-        return menuRepository.findAll().stream().map(mapper::toDto).collect(Collectors.toCollection(ArrayList::new));
+        return menuRepository.findAll().stream().map(mapper::toDto)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     public InlineMenuDto updateInlineMenu(InlineMenuDto inlineMenuDto) {
         log.debug(LOG_SAMPLE, "updateInlineMenu", inlineMenuDto);
-        Set<Long> stateIds = stateRepository.findAll().stream().map(UserState::getId).collect(Collectors.toSet());
-        if (!stateIds.contains(inlineMenuDto.getStateIdNext().getId()) || inlineMenuDto.getStateId().getId() < 0) {
+        Set<Long> stateIds = stateRepository.findAll().stream()
+                .map(UserState::getId).collect(Collectors.toSet());
+        if (!stateIds.contains(inlineMenuDto.getStateIdNext().getId()) ||
+                inlineMenuDto.getStateId().getId() < 0) {
             throw new IllegalArgumentException(NOT_ACCEPTABLE);
         } else if (menuRepository.findById(inlineMenuDto.getId()).isEmpty()) {
             throw new EntityNotFoundException(NOT_FOUND);
@@ -70,7 +73,8 @@ public class InlineMenuServiceImpl implements InlineMenuService {
     public InlineMenuDto deleteInlineMenu(Long id) {
         log.debug(LOG_SAMPLE, "deleteInlineMenu", id);
         InlineMenuDto dto =
-                mapper.toDto(menuRepository.findById(id).orElseThrow(() -> new EntityNotFoundException(NOT_FOUND)));
+                mapper.toDto(menuRepository.findById(id).orElseThrow(() ->
+                        new EntityNotFoundException(NOT_FOUND)));
         menuRepository.deleteById(id);
         return dto;
     }

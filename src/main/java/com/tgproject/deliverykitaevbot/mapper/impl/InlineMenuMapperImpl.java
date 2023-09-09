@@ -8,7 +8,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class InlineMenuMapperImpl implements InlineMenuMapper {
-    ModelMapper mapper = new ModelMapper();
+    private final ModelMapper mapper = new ModelMapper();
+
     @Override
     public InlineMenuDto toDto(InlineMenu inlineMenu) {
         return mapper.map(inlineMenu, InlineMenuDto.class);

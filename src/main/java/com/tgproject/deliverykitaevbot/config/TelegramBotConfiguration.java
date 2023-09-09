@@ -3,6 +3,7 @@ package com.tgproject.deliverykitaevbot.config;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.DeleteMyCommands;
 import lombok.Data;
+import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -33,4 +34,9 @@ public class TelegramBotConfiguration {
 
     @Value("${bot.name}")
     private String botName;
+
+    @Bean
+    public ModelMapper modelMapper() {
+        return new ModelMapper();
+    }
 }

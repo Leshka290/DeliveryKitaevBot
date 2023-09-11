@@ -13,7 +13,6 @@ import java.time.OffsetDateTime;
  * <b>id</b>,<b>firstName</b>,<b>lastTypeRestaurant</b>,<b>chatId</b>
  */
 @Data
-@RequiredArgsConstructor
 @Table(name="users")
 @Entity
 public class User {
@@ -21,9 +20,9 @@ public class User {
     @Id
     @GeneratedValue
     private Long id;
-    private String firstName;
+    private String name;
     private Long chatId;
-    private TypeRestaurant lastTypeRestaurant;
+    @Column(name = "restaurant_id")
     private Long restaurantId;
     private String phone;
     private Long lastResponseStateMenuId;

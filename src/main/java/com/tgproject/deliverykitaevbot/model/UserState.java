@@ -13,7 +13,6 @@ import javax.persistence.*;
  * <b>id</b>,<b>firstName</b>,<b>tagSpecial</b>,<b>restaurantId</b>
  */
 @Data
-@RequiredArgsConstructor
 @Table(name = "user_state")
 @Entity
 public class UserState {
@@ -21,8 +20,9 @@ public class UserState {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String firstName;
+    private String name;
     @Enumerated(EnumType.STRING)
     private UserStateSpecial tagSpecial;
+    @Column(name = "restaurant_id")
     private Long restaurantId;
 }

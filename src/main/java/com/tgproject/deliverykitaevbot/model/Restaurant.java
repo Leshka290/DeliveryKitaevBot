@@ -9,7 +9,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Data
-@RequiredArgsConstructor
 @Table(name = "restaurants")
 @Entity
 public class Restaurant {

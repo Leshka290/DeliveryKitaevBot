@@ -2,6 +2,7 @@ package com.tgproject.deliverykitaevbot.crm;
 
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.model.request.InlineKeyboardMarkup;
 import com.pengrad.telegrambot.model.request.KeyboardButton;
 import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
 import com.pengrad.telegrambot.request.EditMessageText;
@@ -18,6 +19,10 @@ import org.springframework.stereotype.Service;
 
 import javax.validation.constraints.NotNull;
 
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.Locale;
+
 import static com.tgproject.deliverykitaevbot.model.constant.UserStateSpecial.*;
 
 @Slf4j
@@ -32,7 +37,7 @@ public class SpecialService {
     private final InlineBuilder inlineBuilder;
     private final LocalizedMessages lang;
     private final TelegramBot bot;
-    //    private final SupportService supportService;
+    private final SupportService supportService;
 
     /**
      * Метод обрабатывает сообщения, если у пользователя запущен специальный статус
@@ -74,11 +79,11 @@ public class SpecialService {
             return;
         }
 
-//        //Обработка переписки в чате
-//        if (stateSpecial.equals(SUPPORT_CHAT_STARTED)) {
-//            bot.execute(supportService.sendToSupport(update, user));
-//            return;
-//        }
+        //Обработка переписки в чате
+        if (stateSpecial.equals(SUPPORT_CHAT_STARTED)) {
+            bot.execute(supportService.sendToSupport(update, user));
+            return;
+        }
 
         message = lang.get("start");
         SendMessage sendMessage = new SendMessage(user.getChatId(), message);
@@ -101,7 +106,7 @@ public class SpecialService {
             tag = update.callbackQuery().data();
         }
 
-        if (stateSpecial.equals(VANEEVA)) {
+        if (stateSpecial.equals(GET_PHONE)) {
             messageSender.deleteOldMenu(user);
             UserState userState = getUserState(GET_PHONE_STARTED);
             user.setStateId(userState);
@@ -111,8 +116,9 @@ public class SpecialService {
             return;
         }
 
+
         //Обработка начала чата
-        if (stateSpecial.equals(LEVOBEREZHNAYA)) {
+        if (stateSpecial.equals(SUPPORT_CHAT)) {
             messageSender.deleteOldMenu(user);
             UserState userState = getUserState(SUPPORT_CHAT_STARTED);
             user.setStateId(userState);
@@ -127,10 +133,20 @@ public class SpecialService {
             bot.execute(sendMessage);
             return;
         }
-        EditMessageText editMessageText = new EditMessageText(user.getChatId(), user.getLastResponseStateMenuId().intValue(),
-                lang.get("start", user));
-        messageSender.sendMessage(editMessageText, user);
-    }
+            //Генерируем меню
+        //Изменить меню
+            InlineKeyboardMarkup inlineMenuReport = inlineBuilder.getInlineMenu(menu);
+
+            EditMessageText editInlineMessageText = new EditMessageText(user.getChatId(),
+                    user.getLastResponseStateMenuId().intValue(),
+                    "Дата: " + user.getDtCreate().truncatedTo(ChronoUnit.DAYS).format(DateTimeFormatter
+                            .ofPattern("dd MMMM yyyy", Locale.getDefault())) + "\n" +
+                            "Отчет по питомцу: " + user.getName() + "\n" +
+                            "выберите пункт меню, для отправки отчета").replyMarkup(inlineMenuReport);
+            messageSender.sendMessage(editInlineMessageText, user);
+            return;
+
+        }
 
     private UserState getUserState(UserStateSpecial stateSpecial) {
         return userStateRepository.findFirstByTagSpecial(stateSpecial).orElse(null);

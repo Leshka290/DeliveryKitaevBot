@@ -2,10 +2,14 @@ package com.tgproject.deliverykitaevbot.mapper;
 
 import com.tgproject.deliverykitaevbot.dto.RestaurantDto;
 import com.tgproject.deliverykitaevbot.model.Restaurant;
+import org.mapstruct.InheritInverseConfiguration;
+import org.mapstruct.Mapper;
 
+@Mapper(componentModel = "spring")
 public interface RestaurantMapper {
 
-    RestaurantDto toDto(Restaurant restaurant);
+    RestaurantDto map(Restaurant restaurant);
 
-    Restaurant toEntity(RestaurantDto dto);
+    @InheritInverseConfiguration
+    Restaurant map(RestaurantDto dto);
 }

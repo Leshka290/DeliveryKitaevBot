@@ -27,7 +27,7 @@ public class UserCRUDServiceImpl implements UserCRUDService {
     @Override
     public UserCRUDDto getUser(Long id) {
         return userRepository.findById(id)
-                .map(userMapper::toDto)
+                .map(userMapper::map)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
     }
 
@@ -35,7 +35,7 @@ public class UserCRUDServiceImpl implements UserCRUDService {
     public Collection<UserCRUDDto> getAllUsers() {
         return userRepository.findAll()
                 .stream()
-                .map(userMapper::toDto)
+                .map(userMapper::map)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
@@ -43,7 +43,7 @@ public class UserCRUDServiceImpl implements UserCRUDService {
     public UserCRUDDto updateUser(UserCRUDDto userDto) {
         restaurantRepository.findById(userDto.getRestaurantId())
                 .orElseThrow(() -> new EntityNotFoundException("Restaurant not found"));
-        return userMapper.toDto(userRepository.save(userMapper.toEntity(userDto)));
+        return userMapper.map(userRepository.save(userMapper.map(userDto)));
     }
 
     @Override
@@ -51,6 +51,6 @@ public class UserCRUDServiceImpl implements UserCRUDService {
         User user = userRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException("User not found"));
         userRepository.delete(user);
-        return userMapper.toDto(user);
+        return userMapper.map(user);
     }
 }

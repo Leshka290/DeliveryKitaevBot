@@ -25,19 +25,19 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Override
     public List<RestaurantDto> getAll() {
         return restaurantRepository.findAll().stream()
-                .map(restaurantMapper::toDto)
+                .map(restaurantMapper::map)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Override
     public RestaurantDto create(RestaurantDto dto) {
-        Restaurant restaurant = restaurantMapper.toEntity(dto);
-        return restaurantMapper.toDto(restaurantRepository.save(restaurant));
+        Restaurant restaurant = restaurantMapper.map(dto);
+        return restaurantMapper.map(restaurantRepository.save(restaurant));
     }
 
     @Override
     public RestaurantDto read(Long id) {
-        return restaurantMapper.toDto(restaurantRepository.findById(id)
+        return restaurantMapper.map(restaurantRepository.findById(id)
                 .orElseThrow(RestaurantIsNotExistsException::new));
     }
 
@@ -47,7 +47,7 @@ public class RestaurantServiceImpl implements RestaurantService {
                 .orElseThrow(RestaurantIsNotExistsException::new);
         restaurant.setId(id);
         restaurant.setName(dto.getName());
-        return restaurantMapper.toDto(restaurantRepository.save(restaurant));
+        return restaurantMapper.map(restaurantRepository.save(restaurant));
     }
 
     @Override
@@ -55,6 +55,6 @@ public class RestaurantServiceImpl implements RestaurantService {
         Restaurant restaurant = restaurantRepository.findById(id)
                 .orElseThrow(RestaurantIsNotExistsException::new);
         restaurantRepository.delete(restaurant);
-        return restaurantMapper.toDto(restaurant);
+        return restaurantMapper.map(restaurant);
     }
 }

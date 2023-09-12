@@ -1,7 +1,8 @@
 package com.tgproject.deliverykitaevbot.controller;
 
-import com.tgproject.deliverykitaevbot.dto.RestaurantDto;
-import com.tgproject.deliverykitaevbot.service.RestaurantService;
+import com.tgproject.deliverykitaevbot.dto.OrderDto;
+import com.tgproject.deliverykitaevbot.dto.UserCRUDDto;
+import com.tgproject.deliverykitaevbot.service.OrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -17,18 +18,18 @@ import javax.validation.Valid;
 import java.util.Collection;
 import java.util.List;
 
-@RestController
+@RestController()
 @RequiredArgsConstructor
-@RequestMapping("/restaurant")
-public class RestaurantController {
+@RequestMapping("/order")
+public class OrderController {
 
-    private final RestaurantService restaurantService;
+    private final OrderService orderService;
 
-    @Operation(summary = "Find all restaurants.")
+    @Operation(summary = "Find all orders.")
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
-                    description = "Get all Restaurant",
+                    description = "Get all order",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                             schema = @Schema(implementation = Collection.class)
@@ -36,87 +37,87 @@ public class RestaurantController {
             )
     })
     @GetMapping
-    public List<RestaurantDto> getAll() {
-        return restaurantService.getAll();
+    public List<OrderDto> getAll() {
+        return orderService.getAll();
     }
 
-    @Operation(summary = "Find all restaurants.")
+    @Operation(summary = "Find all orders.")
     @ApiResponses({
             @ApiResponse(
                     responseCode = "201",
-                    description = "Create Restaurant",
+                    description = "Create order",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = RestaurantDto.class)
+                            schema = @Schema(implementation = OrderDto.class)
                     )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Restaurant not found"
+                    description = "order not found"
             )
     })
     @PostMapping
-    public ResponseEntity<RestaurantDto> create(@Valid @RequestBody RestaurantDto dto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(restaurantService.create(dto));
+    public ResponseEntity<OrderDto> create(@Valid @RequestBody OrderDto dto, @Valid @RequestBody UserCRUDDto userDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(orderService.create(dto, userDto));
     }
 
-    @Operation(summary = "Find restaurant.")
+    @Operation(summary = "Find order.")
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
-                    description = "Find Restaurant by id",
+                    description = "Find order by id",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = RestaurantDto.class)
+                            schema = @Schema(implementation = OrderDto.class)
                     )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Restaurant not found"
+                    description = "order not found"
             )
     })
     @GetMapping("/{id}")
-    public RestaurantDto read(@PathVariable Long id) {
-        return restaurantService.read(id);
+    public OrderDto read(@PathVariable Long id) {
+        return orderService.read(id);
     }
 
-    @Operation(summary = "Update restaurant.")
+    @Operation(summary = "Update order.")
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
-                    description = "Update Restaurant by id",
+                    description = "Update order by id",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = RestaurantDto.class)
+                            schema = @Schema(implementation = OrderDto.class)
                     )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Restaurant not found"
+                    description = "order not found"
             )
     })
     @PutMapping("/{id}")
-    public RestaurantDto update(@PathVariable Long id, @Valid @RequestBody RestaurantDto dto) {
-        return restaurantService.update(id, dto);
+    public OrderDto update(@PathVariable Long id, @Valid @RequestBody OrderDto dto) {
+        return orderService.update(id, dto);
     }
 
-    @Operation(summary = "Delete restaurant.")
+    @Operation(summary = "Delete order.")
     @ApiResponses({
             @ApiResponse(
                     responseCode = "200",
-                    description = "Delete restaurant by id",
+                    description = "Delete order by id",
                     content = @Content(
                             mediaType = MediaType.APPLICATION_JSON_VALUE,
-                            schema = @Schema(implementation = RestaurantDto.class)
+                            schema = @Schema(implementation = OrderDto.class)
                     )
             ),
             @ApiResponse(
                     responseCode = "404",
-                    description = "Restaurant not found"
+                    description = "order not found"
             )
     })
     @DeleteMapping("/{id}")
-    public RestaurantDto delete(@PathVariable Long id) {
-        return restaurantService.delete(id);
+    public OrderDto delete(@PathVariable Long id) {
+        return orderService.delete(id);
     }
 }

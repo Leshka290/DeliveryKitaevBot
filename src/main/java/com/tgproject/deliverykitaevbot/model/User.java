@@ -1,8 +1,6 @@
 package com.tgproject.deliverykitaevbot.model;
 
-import com.tgproject.deliverykitaevbot.model.constant.TypeRestaurant;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
@@ -10,7 +8,8 @@ import java.time.OffsetDateTime;
 /**
  * Класс пользователь со свойствами:
  * <p>
- * <b>id</b>,<b>firstName</b>,<b>lastTypeRestaurant</b>,<b>chatId</b>
+ * <b>id</b>,<b>name</b>,<b>chatId</b>,<b>restaurantId</b>,<b>lastResponseStateMenuId</b>,
+ * <b>phone</b>,<b>stateId</b>,<b>dtCreate</b>
  */
 @Data
 @Table(name="users")
@@ -30,4 +29,5 @@ public class User {
     @OneToOne
     private UserState stateId;
     private OffsetDateTime dtCreate;
+
 }

@@ -42,18 +42,18 @@ public class InlineMenuServiceImpl implements InlineMenuService {
             throw new EntityExistsException(FORBIDDEN);
         }
         inlineMenuDto.setId(null);
-        return mapper.toDto(menuRepository.save(mapper.toEntity(inlineMenuDto)));
+        return mapper.map(menuRepository.save(mapper.map(inlineMenuDto)));
     }
 
     public InlineMenuDto getInlineMenu(Long id) {
         log.debug(LOG_SAMPLE, "getInlineMenu", id);
-        return menuRepository.findById(id).map(mapper::toDto).orElseThrow(() ->
+        return menuRepository.findById(id).map(mapper::map).orElseThrow(() ->
                 new EntityNotFoundException(NOT_FOUND));
     }
 
     public Collection<InlineMenuDto> getAllInlineMenu() {
         log.debug(LOG_SAMPLE, "getAllInlineMenu", Void.TYPE);
-        return menuRepository.findAll().stream().map(mapper::toDto)
+        return menuRepository.findAll().stream().map(mapper::map)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
@@ -67,13 +67,13 @@ public class InlineMenuServiceImpl implements InlineMenuService {
         } else if (menuRepository.findById(inlineMenuDto.getId()).isEmpty()) {
             throw new EntityNotFoundException(NOT_FOUND);
         }
-        return mapper.toDto(menuRepository.save(mapper.toEntity(inlineMenuDto)));
+        return mapper.map(menuRepository.save(mapper.map(inlineMenuDto)));
     }
 
     public InlineMenuDto deleteInlineMenu(Long id) {
         log.debug(LOG_SAMPLE, "deleteInlineMenu", id);
         InlineMenuDto dto =
-                mapper.toDto(menuRepository.findById(id).orElseThrow(() ->
+                mapper.map(menuRepository.findById(id).orElseThrow(() ->
                         new EntityNotFoundException(NOT_FOUND)));
         menuRepository.deleteById(id);
         return dto;

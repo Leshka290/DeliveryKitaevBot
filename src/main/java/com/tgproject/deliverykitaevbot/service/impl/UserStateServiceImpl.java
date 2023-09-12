@@ -32,7 +32,7 @@ public class UserStateServiceImpl implements UserStateService {
     public Collection<UserStateDto> getAllUserStates() {
         Collection<UserStateDto> all = stateRepository.findAll()
                 .stream()
-                .map(userStateMapper::toDto)
+                .map(userStateMapper::map)
                 .collect(Collectors.toCollection(ArrayList::new));
         log.debug(LOG_SAMPLE, "getAll", Void.TYPE);
         return all;
@@ -42,7 +42,7 @@ public class UserStateServiceImpl implements UserStateService {
     public UserStateDto getUserState(Long id) {
         log.debug(LOG_SAMPLE, "getUserState", id);
         return stateRepository.findById(id)
-                .map(userStateMapper::toDto)
+                .map(userStateMapper::map)
                 .orElseThrow(() -> new EntityNotFoundException(NOT_FOUND));
     }
 
@@ -55,7 +55,7 @@ public class UserStateServiceImpl implements UserStateService {
 //            throw new EntityExistsException(FORBIDDEN);
 //        }
         log.debug(LOG_SAMPLE, "save", userStateDto);
-        return userStateMapper.toDto(stateRepository.save(userStateMapper.toEntity(userStateDto)));
+        return userStateMapper.map(stateRepository.save(userStateMapper.map(userStateDto)));
     }
 
     @Override
@@ -68,7 +68,7 @@ public class UserStateServiceImpl implements UserStateService {
             throw new EntityExistsException(FORBIDDEN);
         }
         log.debug(LOG_SAMPLE, "update", userStateDto);
-        return userStateMapper.toDto(stateRepository.save(userStateMapper.toEntity(userStateDto)));
+        return userStateMapper.map(stateRepository.save(userStateMapper.map(userStateDto)));
     }
 
     @Override
@@ -76,7 +76,7 @@ public class UserStateServiceImpl implements UserStateService {
         log.debug(LOG_SAMPLE, "removeUserState", Void.TYPE);
         UserState state = stateRepository.findById(id).orElseThrow(() ->
                 new EntityNotFoundException(NOT_FOUND));
-        UserStateDto stateDto = userStateMapper.toDto(state);
+        UserStateDto stateDto = userStateMapper.map(state);
         stateRepository.deleteById(id);
         return stateDto;
     }

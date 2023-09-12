@@ -27,22 +27,22 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public List<OrderDto> getAll() {
         return orderRepository.findAll().stream()
-                .map(orderMapper::toDto)
+                .map(orderMapper::map)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
     @Override
     public OrderDto create(OrderDto orderDto, UserCRUDDto userDto) {
-        Order order = orderMapper.toEntity(orderDto);
+        Order order = orderMapper.map(orderDto);
         order.setAddress(orderDto.getAddress());
         order.setOrderId(RandomStringUtils.randomAlphanumeric(8));
         order.setUserId(userDto.getChatId());
-        return orderMapper.toDto(orderRepository.save(order));
+        return orderMapper.map(orderRepository.save(order));
     }
 
     @Override
     public OrderDto read(Long id) {
-        return orderMapper.toDto(orderRepository.findById(id)
+        return orderMapper.map(orderRepository.findById(id)
                 .orElseThrow(OrderIsNotExistsException::new));
     }
 
@@ -51,7 +51,7 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findById(id)
                 .orElseThrow(OrderIsNotExistsException::new);
         order.setId(id);
-        return orderMapper.toDto(orderRepository.save(order));
+        return orderMapper.map(orderRepository.save(order));
     }
 
     @Override
@@ -59,6 +59,6 @@ public class OrderServiceImpl implements OrderService {
         Order order = orderRepository.findById(id)
                 .orElseThrow(OrderIsNotExistsException::new);
         orderRepository.delete(order);
-        return orderMapper.toDto(order);
+        return orderMapper.map(order);
     }
 }

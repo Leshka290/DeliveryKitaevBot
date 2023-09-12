@@ -2,10 +2,14 @@ package com.tgproject.deliverykitaevbot.mapper;
 
 import com.tgproject.deliverykitaevbot.dto.UserStateDto;
 import com.tgproject.deliverykitaevbot.model.UserState;
+import org.mapstruct.InheritInverseConfiguration;
+import org.mapstruct.Mapper;
 
+@Mapper(componentModel = "spring")
 public interface UserStateMapper {
 
-    UserStateDto toDto(UserState userState);
+    UserStateDto map(UserState userState);
 
-    UserState toEntity(UserStateDto userStateDto);
+    @InheritInverseConfiguration
+    UserState map(UserStateDto userStateDto);
 }

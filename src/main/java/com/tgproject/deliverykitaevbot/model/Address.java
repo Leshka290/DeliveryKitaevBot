@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 /**
  * Класс адресс доставки пользователя для БД со свойствами:
- * <p>id</p><p>image</p>
+ * <p>id</p><p>street</p><p>house</p><p>apartment</p><p>userId</p>
  *
  */
 @Entity

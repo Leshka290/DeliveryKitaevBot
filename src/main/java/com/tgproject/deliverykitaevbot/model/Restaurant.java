@@ -8,6 +8,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/**
+ * Класс ресторан со свойствами:
+ * <p>
+ * <b>id</b>,<b>name</b>
+ */
 @Data
 @Table(name = "restaurants")
 @Entity

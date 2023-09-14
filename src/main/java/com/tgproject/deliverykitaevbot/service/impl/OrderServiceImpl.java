@@ -5,7 +5,10 @@ import com.tgproject.deliverykitaevbot.dto.UserCRUDDto;
 import com.tgproject.deliverykitaevbot.exception.OrderIsNotExistsException;
 import com.tgproject.deliverykitaevbot.mapper.OrderMapper;
 import com.tgproject.deliverykitaevbot.model.Order;
+import com.tgproject.deliverykitaevbot.model.Product;
 import com.tgproject.deliverykitaevbot.repository.OrderRepository;
+import com.tgproject.deliverykitaevbot.repository.ProductRepository;
+import com.tgproject.deliverykitaevbot.repository.UserRepository;
 import com.tgproject.deliverykitaevbot.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,14 +25,9 @@ import java.util.stream.Collectors;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
+    private final ProductRepository productRepository;
+    private final UserRepository userRepository;
     private final OrderMapper orderMapper;
-
-    @Override
-    public List<OrderDto> getAll() {
-        return orderRepository.findAll().stream()
-                .map(orderMapper::map)
-                .collect(Collectors.toCollection(ArrayList::new));
-    }
 
     @Override
     public OrderDto create(OrderDto orderDto, UserCRUDDto userDto) {
@@ -42,8 +40,7 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public OrderDto read(Long id) {
-        return orderMapper.map(orderRepository.findById(id)
-                .orElseThrow(OrderIsNotExistsException::new));
+         return orderMapper.map(orderRepository.findById(id).orElseThrow());
     }
 
     @Override
@@ -60,5 +57,24 @@ public class OrderServiceImpl implements OrderService {
                 .orElseThrow(OrderIsNotExistsException::new);
         orderRepository.delete(order);
         return orderMapper.map(order);
+    }
+
+    @Override
+    public OrderDto findOrderAndProductsByOrderId(String id) {
+        List<Product> products = productRepository.findAll()
+                .stream().filter(p -> p.getOrder().getOrderId().equals(id))
+                .collect(Collectors.toList());
+        Order order = orderRepository.findAll().stream()
+                .filter(o -> o.getOrderId().equals(id)).findFirst()
+                .orElseThrow(OrderIsNotExistsException::new);
+        order.setProducts(products);
+        return orderMapper.map(order);
+    }
+
+    @Override
+    public List<OrderDto> getAll() {
+        return orderRepository.findAll().stream()
+                .map(orderMapper::map)
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 }

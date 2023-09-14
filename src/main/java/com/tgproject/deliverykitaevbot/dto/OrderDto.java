@@ -6,6 +6,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 @Data
 public class OrderDto implements Serializable {
@@ -13,6 +14,6 @@ public class OrderDto implements Serializable {
     private Long id;
     private Long userId;
     private Long orderId;
-    private Collection<Product> products;
     private Address address;
+    private List<ProductDto> products;
 }

@@ -5,17 +5,17 @@ import com.tgproject.deliverykitaevbot.dto.UserCRUDDto;
 
 import java.util.List;
 
-public interface OrderService {
+public interface ProductService {
 
     /**
-     * Получить все заказы
+     * Получить все продукты
      *
      * @return List<OrderDto>
      */
     List<OrderDto> getAll();
 
     /**
-     * Создать новый заказ
+     * Создать новый продукт
      *
      * @param orderDto OrderDto
      * @param userDto UserCRUDDto
@@ -24,7 +24,7 @@ public interface OrderService {
     OrderDto create(OrderDto orderDto, UserCRUDDto userDto);
 
     /**
-     * Найти заказ по Id
+     * Найти продукт по ID
      *
      * @param id Long
      * @return OrderDto
@@ -32,7 +32,7 @@ public interface OrderService {
     OrderDto read(Long id);
 
     /**
-     * Обновить заказ
+     * Обновить продукт
      *
      * @param id  Long
      * @param dto OrderDto
@@ -41,18 +41,10 @@ public interface OrderService {
     OrderDto update(Long id, OrderDto dto);
 
     /**
-     * Удалить заказ
+     * Удалить продукт
      *
      * @param id Long
      * @return OrderDto
      */
     OrderDto delete(Long id);
-
-    /**
-     * Получить заказ с товарами по Id
-     *
-     * @param id Long
-     * @return OrderDto
-     */
-    OrderDto findOrderAndProductsByOrderId(String id);
 }

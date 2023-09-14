@@ -19,7 +19,7 @@ public class Address {
     private String street;
     private String house;
     private String apartment;
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "chat_id")
     @ManyToOne
-    private User userId;
+    private User chatId;
 }

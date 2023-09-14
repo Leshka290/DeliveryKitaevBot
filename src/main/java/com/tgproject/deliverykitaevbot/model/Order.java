@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * Класс заказ для БД со свойствами:
- * <p>id</p><p>userId</p><p>orderId</p><p>address</p>
+ * <p>id</p><p>userId</p><p>orderId</p><p>address</p><p>products</p>
  *
  */
 @Entity

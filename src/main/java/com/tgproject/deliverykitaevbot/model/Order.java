@@ -1,8 +1,10 @@
 package com.tgproject.deliverykitaevbot.model;
 
 import lombok.Data;
+import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Класс заказ для БД со свойствами:
@@ -21,4 +23,8 @@ public class Order {
     private String orderId;
     @OneToOne
     private Address address;
+
+    @OneToMany
+    @ToString.Exclude
+    private List<Product> products;
 }

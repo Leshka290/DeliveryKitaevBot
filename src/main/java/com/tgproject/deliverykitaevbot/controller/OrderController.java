@@ -41,7 +41,7 @@ public class OrderController {
         return orderService.getAll();
     }
 
-    @Operation(summary = "Find all orders.")
+    @Operation(summary = "add order.")
     @ApiResponses({
             @ApiResponse(
                     responseCode = "201",
@@ -119,5 +119,25 @@ public class OrderController {
     @DeleteMapping("/{id}")
     public OrderDto delete(@PathVariable Long id) {
         return orderService.delete(id);
+    }
+
+    @Operation(summary = "Find order.")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Find order by id",
+                    content = @Content(
+                            mediaType = MediaType.APPLICATION_JSON_VALUE,
+                            schema = @Schema(implementation = OrderDto.class)
+                    )
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "order not found"
+            )
+    })
+    @GetMapping("/products/{id}")
+    public OrderDto findOrderWithProductsById(@PathVariable String id) {
+        return orderService.findOrderAndProductsByOrderId(id);
     }
 }

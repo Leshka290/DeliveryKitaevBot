@@ -40,7 +40,7 @@ public class RestaurantController {
         return restaurantService.getAll();
     }
 
-    @Operation(summary = "Find all restaurants.")
+    @Operation(summary = "Add restaurant")
     @ApiResponses({
             @ApiResponse(
                     responseCode = "201",

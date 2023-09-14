@@ -26,7 +26,7 @@ public class UserCRUDServiceImpl implements UserCRUDService {
 
     @Override
     public UserCRUDDto getUser(Long id) {
-        return userRepository.findById(id)
+        return userRepository.findByChatId(id)
                 .map(userMapper::map)
                 .orElseThrow(() -> new EntityNotFoundException("User not found"));
     }
@@ -48,7 +48,7 @@ public class UserCRUDServiceImpl implements UserCRUDService {
 
     @Override
     public UserCRUDDto deleteUser(Long id) {
-        User user = userRepository.findById(id).orElseThrow(() ->
+        User user = userRepository.findByChatId(id).orElseThrow(() ->
                 new EntityNotFoundException("User not found"));
         userRepository.delete(user);
         return userMapper.map(user);

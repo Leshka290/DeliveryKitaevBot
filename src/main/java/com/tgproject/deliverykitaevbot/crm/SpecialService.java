@@ -8,11 +8,14 @@ import com.pengrad.telegrambot.model.request.ReplyKeyboardMarkup;
 import com.pengrad.telegrambot.request.EditMessageText;
 import com.pengrad.telegrambot.request.SendMessage;
 import com.tgproject.deliverykitaevbot.crm.botMenu.StartMenu;
+import com.tgproject.deliverykitaevbot.dto.OrderDto;
+import com.tgproject.deliverykitaevbot.mapper.UserCRUDMapper;
 import com.tgproject.deliverykitaevbot.model.InlineMenu;
 import com.tgproject.deliverykitaevbot.model.User;
 import com.tgproject.deliverykitaevbot.model.UserState;
 import com.tgproject.deliverykitaevbot.model.constant.UserStateSpecial;
 import com.tgproject.deliverykitaevbot.repository.UserStateRepository;
+import com.tgproject.deliverykitaevbot.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,6 +25,7 @@ import javax.validation.constraints.NotNull;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Locale;
+import java.util.UUID;
 
 import static com.tgproject.deliverykitaevbot.model.constant.UserStateSpecial.*;
 
@@ -38,6 +42,8 @@ public class SpecialService {
     private final LocalizedMessages lang;
     private final TelegramBot bot;
     private final SupportService supportService;
+    private final OrderService orderService;
+    private final UserCRUDMapper userCRUDMapper;
 
     /**
      * Метод обрабатывает сообщения, если у пользователя запущен специальный статус
@@ -64,6 +70,17 @@ public class SpecialService {
         //Выбор ресторана
         if (stateSpecial.equals(SELECT_RESTAURANT) && tag != null) {
             user.setRestaurantId(Long.parseLong(tag));
+            userService.update(user);
+            messageSender.sendMessage(startMenu.getEditMessageStartMenu(user), user);
+            return;
+        }
+
+        //Выбор продукта
+        if (stateSpecial.equals(FIND_PRODUCTS_STARTED) && tag != null) {
+            messageSender.deleteOldMenu(user);
+            user.setRestaurantId(Long.parseLong(tag));
+            OrderDto order = orderService.create(new OrderDto(), userCRUDMapper.map(user));
+            order.setOrderId(UUID.randomUUID().node());
             userService.update(user);
             messageSender.sendMessage(startMenu.getEditMessageStartMenu(user), user);
             return;
@@ -117,6 +134,18 @@ public class SpecialService {
         }
 
 
+        if (stateSpecial.equals(FIND_PRODUCTS)) {
+            messageSender.deleteOldMenu(user);
+            UserState userState = getUserState(FIND_PRODUCTS_STARTED);
+            OrderDto order = orderService.create(new OrderDto(), userCRUDMapper.map(user));
+            order.setOrderId(UUID.randomUUID().node());
+            user.setStateId(userState);
+            userService.update(user);
+            SendMessage sendMessage = new SendMessage(user.getChatId(), menu.getAnswer());
+            messageSender.sendMessage(sendMessage, user);
+            return;
+        }
+
         //Обработка начала чата
         if (stateSpecial.equals(SUPPORT_CHAT)) {
             messageSender.deleteOldMenu(user);
@@ -134,7 +163,6 @@ public class SpecialService {
             return;
         }
             //Генерируем меню
-        //Изменить меню
             InlineKeyboardMarkup inlineMenuReport = inlineBuilder.getInlineMenu(menu);
 
             EditMessageText editInlineMessageText = new EditMessageText(user.getChatId(),
